@@ -1,6 +1,16 @@
-out/
 
-### IntelliJ IDEA ###
+# 忽略本地 Maven 仓库（全局的）
+~/.m2/repository/
+
+# 忽略项目特定的 target 目录
+target/
+*/target/
+
+# 忽略 IDE 文件
 .idea/
-*.iws
 *.iml
+*.iws
+
+# 忽略构建输出
+build/
+*/build/
