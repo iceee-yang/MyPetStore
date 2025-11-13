@@ -5,6 +5,17 @@
          version="6.0">
 
     <servlet>
+        <servlet-name>MainFormServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.MainFormServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>MainFormServlet</servlet-name>
+        <url-pattern>/mainForm</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>AddItemToCartServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.AddItemToCartServlet</servlet-class>
     </servlet>
