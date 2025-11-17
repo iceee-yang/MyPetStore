@@ -27,6 +27,15 @@
         <servlet-name>RemoveCartItemServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.RemoveCartItemServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SignOnFormServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.SignOnFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewOrderFormServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.NewOrderFormServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>AddItemToCartServlet</servlet-name>
         <url-pattern>/addItemToCart</url-pattern>
@@ -38,6 +47,14 @@
     <servlet-mapping>
         <servlet-name>RemoveCartItemServlet</servlet-name>
         <url-pattern>/removeItemFromCart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignOnFormServlet</servlet-name>
+        <url-pattern>/signonForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewOrderFormServlet</servlet-name>
+        <url-pattern>/newOrderForm</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

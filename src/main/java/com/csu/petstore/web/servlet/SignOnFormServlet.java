@@ -1,0 +1,18 @@
+package com.csu.petstore.web.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+public class SignOnFormServlet extends HttpServlet {
+
+    private static final String SIGN_ON_FORM = "/WEB-INF/jsp/account/signon.jsp";
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doGet(req, resp);
+    }
+}
