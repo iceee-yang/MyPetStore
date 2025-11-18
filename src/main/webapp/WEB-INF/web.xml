@@ -35,6 +35,10 @@
         <servlet-name>NewOrderFormServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.NewOrderFormServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SignOnServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.SignOnServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>AddItemToCartServlet</servlet-name>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>NewOrderFormServlet</servlet-name>
         <url-pattern>/newOrderForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignOnServlet</servlet-name>
+        <url-pattern>/signOn</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>
