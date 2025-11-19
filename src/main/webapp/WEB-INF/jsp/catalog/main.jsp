@@ -26,7 +26,7 @@
         <div id="MainImageContent">
             <map name="estoremap">
                 <area alt="Birds" coords="72,2,280,250"
-                      href="" shape="RECT" />
+                      href="categoryForm?categoryId" shape="RECT" />
                 <area alt="Fish" coords="2,180,72,250"
                       href="" shape="RECT" />
                 <area alt="Dogs" coords="60,250,130,320"

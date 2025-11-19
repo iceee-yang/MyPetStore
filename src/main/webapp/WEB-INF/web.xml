@@ -9,10 +9,20 @@
         <servlet-class>com.csu.petstore.web.servlet.MainFormServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>CategoryFormServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.CategoryFormServlet</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>MainFormServlet</servlet-name>
         <url-pattern>/mainForm</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CategoryFormServlet</servlet-name>
+        <url-pattern>/categoryForm</url-pattern>
     </servlet-mapping>
 
     <servlet>

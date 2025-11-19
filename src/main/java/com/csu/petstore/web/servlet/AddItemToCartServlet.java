@@ -1,6 +1,8 @@
 package com.csu.petstore.web.servlet;
 
 import com.csu.petstore.domain.Cart;
+import com.csu.petstore.domain.Item;
+import com.csu.petstore.service.CatalogService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
