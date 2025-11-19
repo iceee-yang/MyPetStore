@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public class CartItem implements Serializable {
     private static final long serialVersionUID = 6620528781626504362L;
-    //private Item item;
+    private Item item;
     private int quantity;
     private boolean inStock;
     private BigDecimal total;

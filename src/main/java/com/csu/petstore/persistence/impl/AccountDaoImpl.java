@@ -2,6 +2,7 @@ package com.csu.petstore.persistence.impl;
 
 import com.csu.petstore.domain.Account;
 import com.csu.petstore.persistence.AccountDao;
+import com.csu.petstore.persistence.DBUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
