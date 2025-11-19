@@ -28,7 +28,6 @@ public class DBUtil {
             }
         }
     }
-
     public static void closeStatement(Statement statement){
         if(statement != null){
             try {
@@ -38,7 +37,6 @@ public class DBUtil {
             }
         }
     }
-
     public static void closePreparedStatement(PreparedStatement preparedStatement){
         if(preparedStatement != null){
             try {
@@ -48,7 +46,6 @@ public class DBUtil {
             }
         }
     }
-
     public static void closeResultSet(ResultSet resultSet){
         if(resultSet != null){
             try {
@@ -58,4 +55,8 @@ public class DBUtil {
             }
         }
     }
+//
+//    public static void main(String[] args) {
+//        System.out.println(getConnection());
+//    }
 }

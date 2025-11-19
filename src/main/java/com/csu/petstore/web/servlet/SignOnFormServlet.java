@@ -7,17 +7,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class MainFormServlet extends HttpServlet {
+public class SignOnFormServlet extends HttpServlet {
 
-    private static final String MAIN_FORM= "/WEB-INF/jsp/catalog/main.jsp";
+    private static final String SIGN_ON_FORM = "/WEB-INF/jsp/account/signon.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(MAIN_FORM).forward(req,resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doGet(req,resp);
+        super.doGet(req, resp);
     }
 }
