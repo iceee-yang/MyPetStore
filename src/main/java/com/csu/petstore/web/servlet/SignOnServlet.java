@@ -1,7 +1,9 @@
 package com.csu.petstore.web.servlet;
 
 import com.csu.petstore.domain.Account;
+import com.csu.petstore.domain.Product;
 import com.csu.petstore.service.AccountService;
+import com.csu.petstore.service.CatalogService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 public class SignOnServlet extends HttpServlet {
 
@@ -42,7 +45,7 @@ public class SignOnServlet extends HttpServlet {
 
                 if(loginAccount.isListOption()){
                     CatalogService catalogService = new CatalogService();
-                    List<Product> myList = catalogService.getProductListByCatagory(loginAccount.getFavouriteCategoryId());
+                    List<Product> myList = catalogService.getProductListByCategory(loginAccount.getFavouriteCategoryId());
                     session.setAttribute("myList", myList);
                 }
                 resp.sendRedirect("mainForm");
