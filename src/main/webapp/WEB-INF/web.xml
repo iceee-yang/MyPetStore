@@ -14,6 +14,11 @@
         <servlet-class>com.csu.petstore.web.servlet.CategoryFormServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ProductFormServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.ProductFormServlet</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>MainFormServlet</servlet-name>
@@ -23,6 +28,11 @@
     <servlet-mapping>
         <servlet-name>CategoryFormServlet</servlet-name>
         <url-pattern>/categoryForm</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProductFormServlet</servlet-name>
+        <url-pattern>/productForm</url-pattern>
     </servlet-mapping>
 
     <servlet>
