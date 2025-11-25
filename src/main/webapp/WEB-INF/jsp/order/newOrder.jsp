@@ -10,12 +10,9 @@
       <tr>
         <td>Card Type:</td>
         <td>
-<%--          <stripes:select name="order.cardType">--%>
-<%--          <stripes:options-collection--%>
-<%--                  collection="${actionBean.creditCardTypes}" />--%>
-<%--          </stripes:select>--%>
-          <select name="order.cardType" id="">
-            <option value=""></option>
+          <select name="order.cardType">
+              <option value="Visa">Visa</option>
+              <option value="Paypal">Paypal</option>
           </select>
         </td>
       </tr>

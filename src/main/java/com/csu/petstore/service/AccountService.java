@@ -18,4 +18,19 @@ public class AccountService {
         account.setPassword(password);
         return this.accountDao.getAccountByUsernameAndPassword(account);
     }
+
+    public void insertAccount(Account account) {
+        this.accountDao.insertAccount(account);
+        this.accountDao.insertProfile(account);
+        this.accountDao.insertSignon(account);
+    }
+
+    public void updateAccount(Account account) {
+        this.accountDao.updateAccount(account);
+        this.accountDao.updateProfile(account);
+        if (account.getPassword() != null && account.getPassword().length() > 0) {
+            this.accountDao.updateSignon(account);
+        }
+
+    }
 }
