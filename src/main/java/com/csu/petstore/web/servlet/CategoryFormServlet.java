@@ -7,8 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.eclipse.tags.shaded.org.apache.bcel.generic.NEW;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,9 +23,8 @@ public class CategoryFormServlet extends HttpServlet {
         catalogService = new CatalogService();
         Category category = catalogService.getCategory(categoryId);
         List<Product> productList = catalogService.getProductListByCategory(categoryId);
-        HttpSession session = req.getSession();
-        session.setAttribute("category" , category);
-        session.setAttribute("productList" , productList);
+        req.setAttribute("category" , category);
+        req.setAttribute("productList" , productList);
         req.getRequestDispatcher(CATEGORY_FORM).forward(req,resp);
     }
 }

@@ -45,15 +45,15 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public Product getProduct(String var1) {
+    public Product getProduct(String productId) {
         Product product = null;
         try {
             Connection connection = DBUtil.getConnection();
             PreparedStatement pStatement = connection
                     .prepareStatement(getProductString);
-            pStatement.setString(1, var1);
+            pStatement.setString(1, productId);
             ResultSet resultSet = pStatement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 product = new Product();
                 product.setProductId(resultSet.getString(1));
                 product.setName(resultSet.getString(2));
@@ -73,11 +73,11 @@ public class ProductDaoImpl implements ProductDao {
     public List<Product> searchProductList(String keywords) {
         List<Product> productList = new ArrayList<Product>();
 
-        try{
+        try {
             Connection connection = DBUtil.getConnection();
-            PreparedStatement pStatement = connection.prepareStatement(getProductListString);
-            String keywordPattern = keywords == null ? "%" : "%" + keywords.toLowerCase() + "%";
-            pStatement.setString(1,keywordPattern);
+            PreparedStatement pStatement = connection
+                    .prepareStatement(getProductListString);
+            pStatement.setString(1, keywords);
             ResultSet resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
                 Product product = new Product();
@@ -90,9 +90,10 @@ public class ProductDaoImpl implements ProductDao {
             DBUtil.closeResultSet(resultSet);
             DBUtil.closePreparedStatement(pStatement);
             DBUtil.closeConnection(connection);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         return productList;
     }
 }

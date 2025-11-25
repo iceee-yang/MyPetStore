@@ -6,14 +6,14 @@
 
 <div id="Catalog">
 
-  <h2>${sessionScope.category.name}</h2>
+  <h2>${category.name}</h2>
 
   <table>
     <tr>
       <th>Product ID</th>
       <th>Name</th>
     </tr>
-    <c:forEach var="product" items="${sessionScope.productList}">
+    <c:forEach var="product" items="${productList}">
       <tr>
         <td>
           <a href="productForm?productId=${product.productId}">${product.productId}</a>
