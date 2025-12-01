@@ -1,7 +1,7 @@
 <%@ include file="../common/top.jsp"%>
 
 <div id="BackLink">
-    <a href="main.jsp">Return to Main Menu</a> 
+    <a href="mainForm">Return to Main Menu</a>
 </div>
 
 <div id="Catalog">Please confirm the information below and then
@@ -95,7 +95,7 @@
 <%--        <stripes:param name="confirmed" value="true" />--%>
 
 <%--    </stripes:link>--%>
-    <a href="newOrder" class="Button">Confirm</a>
+    <a href="confirmOrder" class="Button">Confirm</a>
 </div>
 
 <%@ include file="../common/bottom.jsp"%>

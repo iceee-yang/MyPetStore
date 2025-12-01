@@ -11,5 +11,5 @@ public interface OrderDao {
 
     void insertOrder(Order order);
 
-    void insertOrderStatus(Order order);
+    //void insertOrderStatus(Order order);
 }

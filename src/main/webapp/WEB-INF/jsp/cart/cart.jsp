@@ -1,7 +1,7 @@
 <%@ include file="../common/top.jsp"%>
 
 <div id="BackLink">
-  <a href="">Return to Main Menu</a>
+  <a href="mainForm">Return to Main Menu</a>
 </div>
 
 <div id="Catalog">
@@ -10,7 +10,8 @@
 
     <h2>Shopping Cart</h2>
 
-    <form action="" method="post">
+    <!-- 提交到 updateCart，由 UpdateCartServlet 的 doPost 处理 -->
+    <form action="updateCart" method="post">
       <table>
         <tr>
           <th><b>Item ID</b></th>
