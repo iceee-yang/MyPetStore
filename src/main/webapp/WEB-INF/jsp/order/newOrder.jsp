@@ -2,7 +2,7 @@
 
 <div id="Catalog">
 
-  <form action="" method="post">
+  <form action="newOrder" method="post">
     <table>
       <tr>
         <th colspan=2>Payment Details</th>

@@ -23,8 +23,28 @@ public class CategoryFormServlet extends HttpServlet {
         catalogService = new CatalogService();
         Category category = catalogService.getCategory(categoryId);
         List<Product> productList = catalogService.getProductListByCategory(categoryId);
+
+        // 调试 Category 查询
+        System.out.println("Category object: " + category);
+        if (category != null) {
+            System.out.println("Category name: " + category.getName());
+        }
+
+        // 调试 Product 查询
+        System.out.println("Product list size: " + (productList != null ? productList.size() : "null"));
+        if (productList != null && !productList.isEmpty()) {
+            for (Product p : productList) {
+                System.out.println("Product: " + p.getProductId() + " - " + p.getName());
+            }
+        }
+
         req.setAttribute("category" , category);
         req.setAttribute("productList" , productList);
+
+        // 转发前再次确认属性
+        System.out.println("Attributes set - category: " + req.getAttribute("category"));
+        System.out.println("Attributes set - productList: " + req.getAttribute("productList"));
+
         req.getRequestDispatcher(CATEGORY_FORM).forward(req,resp);
     }
 }

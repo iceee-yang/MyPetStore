@@ -6,10 +6,12 @@ import com.csu.petstore.domain.Order;
 import com.csu.petstore.persistence.ItemDao;
 import com.csu.petstore.persistence.LineItemDao;
 import com.csu.petstore.persistence.OrderDao;
+import com.csu.petstore.persistence.SequenceDao;
 import com.csu.petstore.persistence.impl.ItemDaoImpl;
 import com.csu.petstore.persistence.impl.LineItemDaoImpl;
 import com.csu.petstore.persistence.impl.OrderDaoImpl;
 
+import javax.sound.midi.Sequence;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ public class OrderService {
     private ItemDao itemDao;
     private OrderDao orderDao;
     private LineItemDao lineItemDao;
+    private SequenceDao sequenceDao;
 
     public OrderService() {
         this.itemDao = new ItemDaoImpl();
@@ -32,7 +35,7 @@ public class OrderService {
         for(int i = 0; i < order.getLineItems().size(); ++i) {
             LineItem lineItem = (LineItem)order.getLineItems().get(i);
             String itemId = lineItem.getItemId();
-            Integer increment = new Integer(lineItem.getQuantity());
+            Integer increment = Integer.valueOf((lineItem.getQuantity()));
             Map<String, Object> param = new HashMap(2);
             param.put("itemId", itemId);
             param.put("increment", increment);
@@ -40,7 +43,7 @@ public class OrderService {
         }
 
         this.orderDao.insertOrder(order);
-        this.orderDao.insertOrderStatus(order);
+        //this.orderDao.insertOrderStatus(order);
 
         for(int i = 0; i < order.getLineItems().size(); ++i) {
             LineItem lineItem = (LineItem)order.getLineItems().get(i);
@@ -69,16 +72,8 @@ public class OrderService {
     }
 
     public int getNextId(String name) {
-//        Sequence sequence = new Sequence(name, -1);
-//        sequence = this.sequenceMapper.getSequence(sequence);
-//        if (sequence == null) {
-//            throw new RuntimeException("Error: A null sequence was returned from the database (could not get next " + name + " sequence).");
-//        } else {
-//            Sequence parameterObject = new Sequence(name, sequence.getNextId() + 1);
-//            this.sequenceMapper.updateSequence(parameterObject);
-//            return sequence.getNextId();
-//        }
-        return 0;
+        return this.sequenceDao.getNextId(name);
     }
+
 
 }
