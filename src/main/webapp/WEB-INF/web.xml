@@ -95,6 +95,14 @@
         <servlet-name>ListOrdersServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.ListOrdersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewCartServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.ViewCartServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignOutServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.SignOutServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>AddItemToCartServlet</servlet-name>
@@ -135,6 +143,14 @@
     <servlet-mapping>
         <servlet-name>ListOrdersServlet</servlet-name>
         <url-pattern>/listOrders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewCartServlet</servlet-name>
+        <url-pattern>/viewCart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignOutServlet</servlet-name>
+        <url-pattern>/signOut</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

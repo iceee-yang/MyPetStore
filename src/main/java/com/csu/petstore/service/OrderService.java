@@ -10,6 +10,7 @@ import com.csu.petstore.persistence.SequenceDao;
 import com.csu.petstore.persistence.impl.ItemDaoImpl;
 import com.csu.petstore.persistence.impl.LineItemDaoImpl;
 import com.csu.petstore.persistence.impl.OrderDaoImpl;
+import com.csu.petstore.persistence.impl.SequenceDaoImpl;
 
 import javax.sound.midi.Sequence;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class OrderService {
         this.itemDao = new ItemDaoImpl();
         this.orderDao = new OrderDaoImpl();
         this.lineItemDao = new LineItemDaoImpl();
+        this.sequenceDao = new SequenceDaoImpl();
     }
 
     public void insertOrder(Order order) {
