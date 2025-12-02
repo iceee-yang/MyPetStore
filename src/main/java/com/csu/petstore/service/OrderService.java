@@ -69,15 +69,16 @@ public class OrderService {
     }
 
     public int getNextId(String name) {
-        Sequence sequence = new Sequence(name, -1);
-        sequence = this.sequenceMapper.getSequence(sequence);
-        if (sequence == null) {
-            throw new RuntimeException("Error: A null sequence was returned from the database (could not get next " + name + " sequence).");
-        } else {
-            Sequence parameterObject = new Sequence(name, sequence.getNextId() + 1);
-            this.sequenceMapper.updateSequence(parameterObject);
-            return sequence.getNextId();
-        }
+//        Sequence sequence = new Sequence(name, -1);
+//        sequence = this.sequenceMapper.getSequence(sequence);
+//        if (sequence == null) {
+//            throw new RuntimeException("Error: A null sequence was returned from the database (could not get next " + name + " sequence).");
+//        } else {
+//            Sequence parameterObject = new Sequence(name, sequence.getNextId() + 1);
+//            this.sequenceMapper.updateSequence(parameterObject);
+//            return sequence.getNextId();
+//        }
+        return 0;
     }
 
 }
