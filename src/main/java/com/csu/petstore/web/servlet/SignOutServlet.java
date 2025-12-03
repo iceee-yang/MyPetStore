@@ -1,6 +1,5 @@
 package com.csu.petstore.web.servlet;
 
-import com.csu.petstore.domain.Account;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,19 +8,21 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-public class NewOrderFormServlet extends HttpServlet {
-    private static final String NEW_ORDER_FORM = "/WEB-INF/jsp/order/newOrder.jsp";
+public class SignOutServlet extends HttpServlet {
 
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Account loginAccount = (Account) session.getAttribute("loginAccount");
-        if (loginAccount == null) {
-            resp.sendRedirect("signonForm");
-        }
-        else{
-            req.getRequestDispatcher(NEW_ORDER_FORM).forward(req, resp);
-        }
 
+        // 清除登录账户信息
+        session.removeAttribute("loginAccount");
+
+        // 可选:清除购物车(根据业务需求决定)
+        // session.removeAttribute("cart");
+
+        // 或者直接销毁整个session
+        // session.invalidate();
+
+        // 重定向到主页
+        resp.sendRedirect("mainForm");
     }
 }
