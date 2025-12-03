@@ -95,6 +95,20 @@
         <servlet-name>ListOrdersServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.ListOrdersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CaptchaServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.CaptchaServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>EditAccountFormServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.EditAccountFormServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>EditAccountServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.EditAccountServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>AddItemToCartServlet</servlet-name>
@@ -135,6 +149,19 @@
     <servlet-mapping>
         <servlet-name>ListOrdersServlet</servlet-name>
         <url-pattern>/listOrders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CaptchaServlet</servlet-name>
+        <url-pattern>/captcha</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>EditAccountFormServlet</servlet-name>
+        <url-pattern>/editAccountForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAccountServlet</servlet-name>
+        <url-pattern>/editAccount</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

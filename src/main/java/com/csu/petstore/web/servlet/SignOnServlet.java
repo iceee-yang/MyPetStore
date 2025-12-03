@@ -26,6 +26,19 @@ public class SignOnServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.username = req.getParameter("username");
         this.password = req.getParameter("password");
+        String captcha = req.getParameter("captcha");
+
+        // 校验验证码（不区分大小写）
+        HttpSession session = req.getSession();
+        Object sessionCodeObj = session.getAttribute(CaptchaServlet.SESSION_KEY);
+        String sessionCode = sessionCodeObj == null ? null : sessionCodeObj.toString();
+        if (sessionCode == null || captcha == null ||
+                !sessionCode.equalsIgnoreCase(captcha.trim())) {
+            this.msg = "验证码错误";
+            req.setAttribute("signOnMsg", this.msg);
+            req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
+            return;
+        }
 
         //校验用户输入的正确性
         if(!validate()){
@@ -37,10 +50,11 @@ public class SignOnServlet extends HttpServlet {
             Account loginAccount = accountService.getAccount(username, password);
             if(loginAccount == null){
                 this.msg = "用户名或密码错误";
+                req.setAttribute("signOnMsg", this.msg);
                 req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
             }else{
                 loginAccount.setPassword(null);
-                HttpSession session = req.getSession();
+                // 这里直接复用上面创建的 session
                 session.setAttribute("loginAccount", loginAccount);
 
                 if(loginAccount.isListOption()){
