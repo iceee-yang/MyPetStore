@@ -1,9 +1,11 @@
 package com.csu.petstore.web.servlet;
 
 import com.csu.petstore.domain.Account;
-import com.csu.petstore.domain.Product;
+import com.csu.petstore.domain.Cart;
 import com.csu.petstore.service.AccountService;
+import com.csu.petstore.service.CartService;
 import com.csu.petstore.service.CatalogService;
+import com.csu.petstore.domain.Product;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,65 +19,56 @@ public class SignOnServlet extends HttpServlet {
 
     private static final String SIGN_ON_FORM = "/WEB-INF/jsp/account/signon.jsp";
 
-    private String username;
-    private String password;
+    private AccountService accountService;
+    private CatalogService catalogService;
+    private CartService cartService;  // 新增
 
-    private String msg;
+    public SignOnServlet() {
+        accountService = new AccountService();
+        catalogService = new CatalogService();
+        cartService = new CartService();  // 新增
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.username = req.getParameter("username");
-        this.password = req.getParameter("password");
-        String captcha = req.getParameter("captcha");
 
-        // 校验验证码（不区分大小写）
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        String code = req.getParameter("code");
+
         HttpSession session = req.getSession();
-        Object sessionCodeObj = session.getAttribute(CaptchaServlet.SESSION_KEY);
-        String sessionCode = sessionCodeObj == null ? null : sessionCodeObj.toString();
-        if (sessionCode == null || captcha == null ||
-                !sessionCode.equalsIgnoreCase(captcha.trim())) {
-            this.msg = "验证码错误";
-            req.setAttribute("signOnMsg", this.msg);
-            req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
-            return;
-        }
+        String vCode = (String) session.getAttribute("vCode");
 
-        //校验用户输入的正确性
-        if(!validate()){
-            req.setAttribute("signOnMsg", this.msg);
-            req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
-        }
-        else {
-            AccountService accountService = new AccountService();
-            Account loginAccount = accountService.getAccount(username, password);
-            if(loginAccount == null){
-                this.msg = "用户名或密码错误";
-                req.setAttribute("signOnMsg", this.msg);
-                req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
-            }else{
-                loginAccount.setPassword(null);
-                // 这里直接复用上面创建的 session
-                session.setAttribute("loginAccount", loginAccount);
+//        // 验证码校验
+//        if (code == null || !code.equalsIgnoreCase(vCode)) {
+//            String msg = "验证码错误！";
+//            req.setAttribute("signOnMsg", msg);
+//            req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
+//            return;
+//        }
 
-                if(loginAccount.isListOption()){
-                    CatalogService catalogService = new CatalogService();
-                    List<Product> myList = catalogService.getProductListByCategory(loginAccount.getFavouriteCategoryId());
-                    session.setAttribute("myList", myList);
-                }
-                resp.sendRedirect("mainForm");
+        // 账号密码校验
+        Account loginAccount = accountService.getAccount(username, password);
+
+        if (loginAccount == null) {
+            String msg = "用户名或密码错误！";
+            req.setAttribute("signOnMsg", msg);
+            req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
+        } else {
+            loginAccount.setPassword(null);
+            session.setAttribute("loginAccount", loginAccount);
+
+            // 【新增】登录成功后，从数据库加载用户的购物车
+            Cart cart = cartService.getCartByUsername(username);
+            session.setAttribute("cart", cart);
+
+            // 如果用户选择了"我喜欢的分类"，保存到session
+            if (loginAccount.isBannerOption()) {
+                List<Product> myList = catalogService.getProductListByCategory(loginAccount.getBannerName());
+                session.setAttribute("myList", myList);
             }
-        }
-    }
 
-    private boolean validate() {
-        if (this.username == null || this.username.equals("")) {
-            this.msg = "用户名不能为空";
-            return false;
+            resp.sendRedirect("mainForm");
         }
-        if (this.password == null || this.password.equals("")) {
-            this.msg = "密码不能为空";
-            return false;
-        }
-        return true;
     }
 }

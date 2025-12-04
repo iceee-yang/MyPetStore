@@ -1,7 +1,9 @@
 package com.csu.petstore.web.servlet;
 
+import com.csu.petstore.domain.Account;
 import com.csu.petstore.domain.Cart;
 import com.csu.petstore.domain.CartItem;
+import com.csu.petstore.service.CartService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,30 +15,54 @@ import java.util.Iterator;
 
 public class UpdateCartServlet extends HttpServlet {
 
-    private static final String CART_FORM = "/WEB-INF/jsp/cart/cart.jsp";
+    private static final String VIEW_CART = "/WEB-INF/jsp/cart/cart.jsp";
+
+    private CartService cartService;
+
+    public UpdateCartServlet() {
+        cartService = new CartService();
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
+        Account loginAccount = (Account) session.getAttribute("loginAccount");
 
-        while(cartItems.hasNext()) {
-            CartItem cartItem = (CartItem)cartItems.next();
+        // ✅ 修改：未登录时重定向到登录页面
+        if (loginAccount == null) {
+            resp.sendRedirect("signonForm");
+            return;
+        }
+
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new Cart();
+        }
+
+        String username = loginAccount.getUsername();
+
+        // 更新购物车中每个商品的数量到数据库
+        Iterator<CartItem> cartItemIterator = cart.getAllCartItems();
+        while (cartItemIterator.hasNext()) {
+            CartItem cartItem = cartItemIterator.next();
             String itemId = cartItem.getItem().getItemId();
 
             try {
-                String quantityString = req.getParameter(itemId);
-                int quantity = Integer.parseInt(quantityString);
+                int quantity = Integer.parseInt(req.getParameter(itemId));
 
-                cart.setQuantityByItemId(itemId, quantity);
-                if (quantity < 1) {
-                    cartItems.remove();
-                }
-            } catch (Exception var6) {
+                // 更新数据库中的商品数量
+                cartService.updateCartItemQuantity(username, itemId, quantity);
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
         }
 
-        req.getRequestDispatcher(CART_FORM).forward(req, resp);
+        // 从数据库重新加载购物车
+        cart = cartService.getCartByUsername(username);
+        session.setAttribute("cart", cart);
+
+        // 转发到购物车页面
+        req.getRequestDispatcher(VIEW_CART).forward(req, resp);
     }
 }
