@@ -5,6 +5,7 @@ import com.csu.petstore.domain.Cart;
 import com.csu.petstore.service.AccountService;
 import com.csu.petstore.service.CartService;
 import com.csu.petstore.service.CatalogService;
+import com.csu.petstore.service.UserActionLogService;
 import com.csu.petstore.domain.Product;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -21,16 +22,20 @@ public class SignOnServlet extends HttpServlet {
 
     private AccountService accountService;
     private CatalogService catalogService;
-    private CartService cartService;  // 新增
+    private CartService cartService;
+    private UserActionLogService logService;
 
     public SignOnServlet() {
         accountService = new AccountService();
         catalogService = new CatalogService();
-        cartService = new CartService();  // 新增
+        cartService = new CartService();
+        logService = new UserActionLogService();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("【TEST】SignOnServlet reached");
+
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -53,10 +58,13 @@ public class SignOnServlet extends HttpServlet {
         if (loginAccount == null) {
             String msg = "用户名或密码错误！";
             req.setAttribute("signOnMsg", msg);
+            logService.log(req, "LOGIN", "ACCOUNT", username, "FAIL", "wrong username or password");
             req.getRequestDispatcher(SIGN_ON_FORM).forward(req, resp);
         } else {
             loginAccount.setPassword(null);
             session.setAttribute("loginAccount", loginAccount);
+
+            logService.log(req, "LOGIN", "ACCOUNT", username, "SUCCESS", null);
 
             // 【新增】登录成功后，从数据库加载用户的购物车
             Cart cart = cartService.getCartByUsername(username);

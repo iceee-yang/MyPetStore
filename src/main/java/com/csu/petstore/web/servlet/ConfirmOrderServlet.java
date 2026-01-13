@@ -3,7 +3,9 @@ package com.csu.petstore.web.servlet;
 import com.csu.petstore.domain.Account;
 import com.csu.petstore.domain.Order;
 import com.csu.petstore.service.CartService;
+import com.csu.petstore.service.CatalogService;
 import com.csu.petstore.service.OrderService;
+import com.csu.petstore.service.UserActionLogService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,11 +19,13 @@ public class ConfirmOrderServlet extends HttpServlet {
     private static final String VIEW_ORDER_FORM = "/WEB-INF/jsp/order/viewOrder.jsp";
 
     private OrderService orderService;
-    private CartService cartService;  // 新增
+    private CartService cartService;
+    private UserActionLogService logService;
 
     public ConfirmOrderServlet() {
         this.orderService = new OrderService();
-        this.cartService = new CartService();  // 新增
+        this.cartService = new CartService();
+        this.logService = new UserActionLogService();
     }
 
     @Override
@@ -45,8 +49,18 @@ public class ConfirmOrderServlet extends HttpServlet {
             // 订单保存成功后，跳转到查看订单页面
             req.getRequestDispatcher(VIEW_ORDER_FORM).forward(req, resp);
         } else {
-            // 如果订单为空，重定向到主页
-            resp.sendRedirect("mainForm");
+            if (loginAccount == null) {
+                logService.log(req, "CONFIRM_ORDER", "ORDER", null, "FAIL", "not login");
+                resp.sendRedirect("mainForm");
+                return;
+            }
+
+            if (order == null) {
+                logService.log(req, "CONFIRM_ORDER", "ORDER", null, "FAIL", "order is null");
+                resp.sendRedirect("mainForm");
+                return;
+            }
+
         }
     }
 }

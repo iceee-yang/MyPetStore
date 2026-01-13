@@ -7,6 +7,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8" />
     <title>MyPetStore</title>
     <link rel="StyleSheet" href="css/mypetstore.css" type="text/css" media="screen" />
 </head>

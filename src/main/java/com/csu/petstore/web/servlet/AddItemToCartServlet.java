@@ -5,6 +5,7 @@ import com.csu.petstore.domain.Cart;
 import com.csu.petstore.domain.Item;
 import com.csu.petstore.service.CartService;
 import com.csu.petstore.service.CatalogService;
+import com.csu.petstore.service.UserActionLogService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +21,12 @@ public class AddItemToCartServlet extends HttpServlet {
 
     private CatalogService catalogService;
     private CartService cartService;
+    private UserActionLogService logService;
 
     public AddItemToCartServlet() {
         catalogService = new CatalogService();
         cartService = new CartService();
+        logService = new UserActionLogService();
     }
 
     @Override
@@ -34,6 +37,7 @@ public class AddItemToCartServlet extends HttpServlet {
 
         // ✅ 修改：未登录时重定向到登录页面
         if (loginAccount == null) {
+            logService.log(req, "ADD_TO_CART", "ITEM", workingItemId, "FAIL", "not login");
             resp.sendRedirect("signonForm");
             return;
         }
@@ -44,6 +48,7 @@ public class AddItemToCartServlet extends HttpServlet {
         if (item == null) {
             String msg = "商品不存在！";
             req.setAttribute("errorMsg", msg);
+            logService.log(req, "ADD_TO_CART", "ITEM", workingItemId, "FAIL", "item not found");
             req.getRequestDispatcher(ERROR_FORM).forward(req, resp);
             return;
         }
@@ -55,6 +60,8 @@ public class AddItemToCartServlet extends HttpServlet {
         // 从数据库重新加载购物车到Session
         Cart cart = cartService.getCartByUsername(username);
         session.setAttribute("cart", cart);
+
+        logService.log(req, "ADD_TO_CART", "ITEM", workingItemId, "SUCCESS", null);
 
         // 转发到购物车页面
         req.getRequestDispatcher(VIEW_CART).forward(req, resp);
