@@ -34,8 +34,6 @@ public class SignOnServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("【TEST】SignOnServlet reached");
-
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");

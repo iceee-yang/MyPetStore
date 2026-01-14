@@ -23,7 +23,7 @@
     </div>
 
     <div id="Menu">
-        <div id="MenuContent"><a href="viewCart"><img align="middle" name="img_cart" src="images/cart.gif" /></a>
+        <div id="MenuContent"><a href="viewCart"><img align="middle" name="img_cart" src="images/cart.gif" /> (<span id="cartNumberOfItems"><c:out value="${sessionScope.cart.numberOfItems > 0 ? sessionScope.cart.numberOfItems : 0}"/></span>)</a>
             <img align="middle" src="images/separator.gif" />
             <c:if test="${sessionScope.loginAccount == null}">
                 <a href="signonForm">Sign In</a>

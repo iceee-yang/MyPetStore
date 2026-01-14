@@ -76,8 +76,15 @@ public class EditAccountServlet extends HttpServlet {
     private String validate(Account account, String repeatedPassword) {
         // 密码为空表示不修改密码；如果填写了则需要重复校验
         if (account.getPassword() != null && !account.getPassword().isEmpty()) {
-            if (repeatedPassword == null || !account.getPassword().equals(repeatedPassword)) {
-                return "两次输入的密码不一致";
+            String password = account.getPassword();
+            if (password.length() < 8 || password.length() > 15) {
+                return "Password must be 8-15 characters long";
+            }
+            if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
+                return "Password must contain both letters and numbers";
+            }
+            if (repeatedPassword == null || !password.equals(repeatedPassword)) {
+                return "Passwords do not match";
             }
         }
         if (isBlank(account.getFirstName()) || isBlank(account.getLastName())) {

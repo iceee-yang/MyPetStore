@@ -70,10 +70,17 @@ public class NewAccountServlet extends HttpServlet {
             return "用户名不能为空";
         }
         if (isBlank(account.getPassword())) {
-            return "密码不能为空";
+            return "Password is required";
         }
-        if (!account.getPassword().equals(repeatedPassword)) {
-            return "两次输入的密码不一致";
+        String password = account.getPassword();
+        if (password.length() < 8 || password.length() > 15) {
+            return "Password must be 8-15 characters long";
+        }
+        if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
+            return "Password must contain both letters and numbers";
+        }
+        if (repeatedPassword == null || !password.equals(repeatedPassword)) {
+            return "Passwords do not match";
         }
         if (isBlank(account.getFirstName()) || isBlank(account.getLastName())) {
             return "姓名不能为空";

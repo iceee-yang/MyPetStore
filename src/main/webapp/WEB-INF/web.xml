@@ -93,6 +93,11 @@
         <servlet-name>UpdateCartServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.UpdateCartServlet</servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>UpdateCartItemAjaxServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.UpdateCartItemAjaxServlet</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>RemoveCartItemServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.RemoveCartItemServlet</servlet-class>
@@ -160,6 +165,11 @@
     <servlet-mapping>
         <servlet-name>UpdateCartServlet</servlet-name>
         <url-pattern>/updateCart</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UpdateCartItemAjaxServlet</servlet-name>
+        <url-pattern>/updateCartItemAjax</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RemoveCartItemServlet</servlet-name>

@@ -11,7 +11,7 @@
     <h2>Shopping Cart</h2>
 
     <!-- 提交到 updateCart，由 UpdateCartServlet 的 doPost 处理 -->
-    <form action="updateCart" method="post">
+    <form action="updateCart" method="post" id="cartForm">
       <table>
         <tr>
           <th><b>Item ID</b></th>
@@ -41,7 +41,10 @@
                 ${cartItem.item.attribute5} ${cartItem.item.product.name}</td>
             <td>${cartItem.inStock}</td>
             <td>
-              <input type="text" name="${cartItem.item.itemId}" value="${cartItem.quantity}">
+              <input type="number" min="0" name="${cartItem.item.itemId}" value="${cartItem.quantity}" 
+                     data-item-id="${cartItem.item.itemId}"
+                     onchange="updateCartItemQuantity(this, '${cartItem.item.itemId}')"
+                     style="width: 50px;">
             </td>
             <td><fmt:formatNumber value="${cartItem.item.listPrice}"
                                   pattern="$#,##0.00" /></td>
@@ -54,8 +57,8 @@
         </c:forEach>
         <tr>
           <td colspan="7">
-            Sub Total: <fmt:formatNumber value="${sessionScope.cart.subTotal}" pattern="$#,##0.00" />
-            <input type="submit" value="Update Cart">
+            Sub Total: $<span id="cartSubTotal"><fmt:formatNumber value="${sessionScope.cart.subTotal}" pattern="#0.00" /></span>
+            <input type="submit" value="Update Cart" id="updateCartSubmit">
           </td>
           <td>&nbsp;</td>
         </tr>
@@ -79,5 +82,58 @@
 
   <div id="Separator">&nbsp;</div>
 </div>
+
+<script>
+function updateCartItemQuantity(input, itemId) {
+    const quantity = input.value;
+
+    const originalValue = input.value;
+    input.disabled = true;
+
+    fetch('updateCartItemAjax', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'itemId=' + encodeURIComponent(itemId) + '&quantity=' + encodeURIComponent(quantity)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.ok) {
+            document.getElementById('cartSubTotal').textContent = data.subTotal;
+            const cartNumEl = document.getElementById('cartNumberOfItems');
+            if (cartNumEl) {
+                cartNumEl.textContent = data.numberOfItems;
+            }
+
+            const row = input.closest('tr');
+            const totalCell = row ? row.querySelector('td:nth-child(7)') : null;
+            if (totalCell) {
+                totalCell.textContent = '$' + data.itemTotal;
+            }
+
+            if (data.quantity <= 0 && row) {
+                row.remove();
+            }
+        } else {
+            alert('更新购物车失败: ' + (data.message || '未知错误'));
+            input.value = originalValue;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('更新购物车时出错，请重试');
+        input.value = originalValue;
+    })
+    .finally(() => {
+        input.disabled = false;
+    });
+}
+</script>
 
 <%@ include file="../common/bottom.jsp"%>
