@@ -16,11 +16,10 @@ public class SignOutServlet extends HttpServlet {
         // 清除登录账户信息
         session.removeAttribute("loginAccount");
 
-        // 可选:清除购物车(根据业务需求决定)
-        // session.removeAttribute("cart");
+        // 清除购物车（Session中的临时数据）
+        session.removeAttribute("cart");
 
-        // 或者直接销毁整个session
-        // session.invalidate();
+        // 注意：不删除数据库中的购物车，下次登录时会重新加载
 
         // 重定向到主页
         resp.sendRedirect("mainForm");

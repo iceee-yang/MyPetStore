@@ -7,6 +7,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8" />
     <title>MyPetStore</title>
     <link rel="StyleSheet" href="css/mypetstore.css" type="text/css" media="screen" />
 </head>
@@ -33,6 +34,8 @@
                 <a href="signOut">Sign Out</a>
                 <img align="middle" src="images/separator.gif" />
                 <a href="editAccountForm">My Account</a>
+                <img align="middle" src="images/separator.gif" />
+                <a href="listLogs">My Logs</a>
                 <img align="middle" src="images/separator.gif" />
             </c:if>
             <a href="../help.html">?</a>

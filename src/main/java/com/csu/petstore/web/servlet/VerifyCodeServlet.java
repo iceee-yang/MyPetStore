@@ -68,9 +68,3 @@ public class VerifyCodeServlet extends HttpServlet {
         return new Color(random.nextInt(200), random.nextInt(200), random.nextInt(200));
     }
 }
-
-
-
-
-
-
