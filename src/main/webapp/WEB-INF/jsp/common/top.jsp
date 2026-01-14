@@ -44,10 +44,88 @@
 
     <div id="Search">
         <div id="SearchContent">
-            <form action="" method="post">
-                <input type="text" name="keyword" size="14">
+            <form action="searchCategory" method="get" id="globalSearchForm">
+                <input type="text" name="keyword" size="14" id="globalSearchInput" list="productSuggestions" autocomplete="off">
+                <datalist id="productSuggestions"></datalist>
                 <input type="submit" value="Search">
             </form>
+            <script>
+                (function () {
+                    var input = document.getElementById('globalSearchInput');
+                    var form = document.getElementById('globalSearchForm');
+                    var datalist = document.getElementById('productSuggestions');
+
+                    if (!input || !form || !datalist) {
+                        return;
+                    }
+
+                    var debounceTimer = null;
+                    var latestProducts = [];
+
+                    function clearOptions() {
+                        while (datalist.firstChild) {
+                            datalist.removeChild(datalist.firstChild);
+                        }
+                    }
+
+                    function fillOptions(products) {
+                        clearOptions();
+                        for (var i = 0; i < products.length; i++) {
+                            var p = products[i];
+                            if (!p || !p.label) {
+                                continue;
+                            }
+                            var opt = document.createElement('option');
+                            opt.value = p.label;
+                            datalist.appendChild(opt);
+                        }
+                    }
+
+                    function fetchSuggestions(q) {
+                        var url = 'autocompleteProduct?q=' + encodeURIComponent(q);
+                        fetch(url, { method: 'GET' })
+                            .then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                latestProducts = Array.isArray(data) ? data : [];
+                                fillOptions(latestProducts);
+                            })
+                            .catch(function () {
+                                latestProducts = [];
+                                clearOptions();
+                            });
+                    }
+
+                    input.addEventListener('input', function () {
+                        var q = (input.value || '').trim();
+                        if (q.length < 2) {
+                            latestProducts = [];
+                            clearOptions();
+                            return;
+                        }
+                        if (debounceTimer) {
+                            clearTimeout(debounceTimer);
+                        }
+                        debounceTimer = setTimeout(function () {
+                            fetchSuggestions(q);
+                        }, 200);
+                    });
+
+                    form.addEventListener('submit', function (e) {
+                        var v = (input.value || '').trim();
+                        for (var i = 0; i < latestProducts.length; i++) {
+                            var p = latestProducts[i];
+                            if (!p) {
+                                continue;
+                            }
+                            if (v === p.label) {
+                                e.preventDefault();
+                                window.location.href = 'productForm?productId=' + encodeURIComponent(p.productId);
+                                return;
+                            }
+                        }
+                    });
+                })();
+            </script>
         </div>
     </div>
 
