@@ -12,8 +12,11 @@ import java.util.List;
 
 public class OrderDaoImpl implements OrderDao {
 
+    // Simplified query: only select from ORDERS table.
+    // The previous version joined ORDERSTATUS, which required an extra row in ORDERSTATUS
+    // and caused the user's order list to be empty when no status row existed.
     private static final String GET_ORDER_BY_USERNAME = """
-            SELECT\
+            SELECT
                   BILLADDR1 AS billAddress1,
                   BILLADDR2 AS billAddress2,
                   BILLCITY,
@@ -38,11 +41,9 @@ public class OrderDaoImpl implements OrderDao {
                   ORDERDATE,
                   ORDERS.ORDERID,
                   TOTALPRICE,
-                  USERID AS username,
-                  STATUS
-                FROM ORDERS, ORDERSTATUS
-                WHERE ORDERS.USERID = ?\s
-                  AND ORDERS.ORDERID = ORDERSTATUS.ORDERID
+                  USERID AS username
+                FROM ORDERS
+                WHERE ORDERS.USERID = ?
                 ORDER BY ORDERDATE""";
 
     private static final String GET_ORDER_BY_ID = """
@@ -110,7 +111,8 @@ public class OrderDaoImpl implements OrderDao {
                 Order order = new Order();
                 order.setOrderId(rs.getInt("ORDERID"));
                 order.setUsername(rs.getString("username"));
-                order.setOrderDate(rs.getDate("ORDERDATE"));
+                // Use getTimestamp so that time part is kept.
+                order.setOrderDate(rs.getTimestamp("ORDERDATE"));
                 order.setBillAddress1(rs.getString("billAddress1"));
                 order.setBillAddress2(rs.getString("billAddress2"));
                 order.setBillCity(rs.getString("BILLCITY"));
@@ -133,7 +135,7 @@ public class OrderDaoImpl implements OrderDao {
                 order.setExpiryDate(rs.getString("expiryDate"));
                 order.setCardType(rs.getString("CARDTYPE"));
                 order.setLocale(rs.getString("LOCALE"));
-
+                // Status is not populated here because we no longer join ORDERSTATUS.
                 orders.add(order);
             }
         } catch (Exception e) {
@@ -163,7 +165,8 @@ public class OrderDaoImpl implements OrderDao {
                 order = new Order();
                 order.setOrderId(rs.getInt("ORDERID"));
                 order.setUsername(rs.getString("username"));
-                order.setOrderDate(rs.getDate("ORDERDATE"));
+                // Use getTimestamp so that time part is kept.
+                order.setOrderDate(rs.getTimestamp("ORDERDATE"));
                 order.setBillAddress1(rs.getString("billAddress1"));
                 order.setBillAddress2(rs.getString("billAddress2"));
                 order.setBillCity(rs.getString("BILLCITY"));
@@ -207,7 +210,8 @@ public class OrderDaoImpl implements OrderDao {
             ps = conn.prepareStatement(INSERT_ORDER);
             ps.setInt(1, order.getOrderId());
             ps.setString(2, order.getUsername());
-            ps.setDate(3, new java.sql.Date(order.getOrderDate().getTime()));
+            // Use Timestamp so that time (HH:mm:ss) is preserved instead of being truncated to date only.
+            ps.setTimestamp(3, new java.sql.Timestamp(order.getOrderDate().getTime()));
             ps.setString(4, order.getShipAddress1());
             ps.setString(5, order.getShipAddress2());
             ps.setString(6, order.getShipCity());

@@ -203,9 +203,29 @@
         <servlet-class>com.csu.petstore.web.servlet.ListLogsServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>NewOrderAjaxServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.NewOrderAjaxServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ConfirmOrderAjaxServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.ConfirmOrderAjaxServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>ListLogsServlet</servlet-name>
         <url-pattern>/listLogs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>NewOrderAjaxServlet</servlet-name>
+        <url-pattern>/newOrderAjax</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ConfirmOrderAjaxServlet</servlet-name>
+        <url-pattern>/confirmOrderAjax</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>
