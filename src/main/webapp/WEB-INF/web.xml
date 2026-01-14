@@ -89,6 +89,16 @@
         <servlet-name>AddItemToCartServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.AddItemToCartServlet</servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>CategoryInfoAjaxServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.CategoryInfoAjaxServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>CategoryItemsAjaxServlet</servlet-name>
+        <servlet-class>com.csu.petstore.web.servlet.CategoryItemsAjaxServlet</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>UpdateCartServlet</servlet-name>
         <servlet-class>com.csu.petstore.web.servlet.UpdateCartServlet</servlet-class>
@@ -161,6 +171,16 @@
     <servlet-mapping>
         <servlet-name>AddItemToCartServlet</servlet-name>
         <url-pattern>/addItemToCart</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CategoryInfoAjaxServlet</servlet-name>
+        <url-pattern>/categoryInfoAjax</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CategoryItemsAjaxServlet</servlet-name>
+        <url-pattern>/categoryItemsAjax</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UpdateCartServlet</servlet-name>
