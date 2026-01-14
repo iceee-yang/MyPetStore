@@ -18,11 +18,17 @@
       </tr>
       <tr>
         <td>New password:</td>
-        <td><input type="password" name="password" id="password" /></td>
+        <td>
+          <input type="password" name="password" id="password" />
+          <span id="passwordMsg" style="margin-left: 8px;"></span>
+        </td>
       </tr>
       <tr>
         <td>Repeat password:</td>
-        <td><input type="password" name="repeatedPassword" id="repeatedPassword" /></td>
+        <td>
+          <input type="password" name="repeatedPassword" id="repeatedPassword" />
+          <span id="repeatedPasswordMsg" style="margin-left: 8px;"></span>
+        </td>
       </tr>
     </table>
 
@@ -37,11 +43,15 @@
 (function () {
   var usernameEl = document.getElementById('username');
   var usernameMsgEl = document.getElementById('usernameMsg');
+  var passwordEl = document.getElementById('password');
+  var passwordMsgEl = document.getElementById('passwordMsg');
+  var repeatedPasswordEl = document.getElementById('repeatedPassword');
+  var repeatedPasswordMsgEl = document.getElementById('repeatedPasswordMsg');
   var formEl = document.getElementById('newAccountForm');
 
-  function setMsg(text, ok) {
-    usernameMsgEl.textContent = text || '';
-    usernameMsgEl.style.color = ok ? 'green' : 'red';
+  function setMsg(el, text, ok) {
+    el.textContent = text || '';
+    el.style.color = ok ? 'green' : 'red';
   }
 
   function checkUsernameExists(username, cb) {
@@ -63,29 +73,102 @@
     xhr.send();
   }
 
+  function validatePassword(password) {
+    if (!password) {
+      return 'Password is required';
+    }
+    if (password.length < 8 || password.length > 15) {
+      return 'Password must be 8-15 characters long';
+    }
+    if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) {
+      return 'Password must contain both letters and numbers';
+    }
+    return null; // 返回 null 表示验证通过
+  }
+
+  function validatePasswordsMatch(password, repeatedPassword) {
+    if (password !== repeatedPassword) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
   function validateUsernameAsync(cb) {
     var username = (usernameEl.value || '').trim();
     if (!username) {
-      setMsg('Username is required', false);
+      setMsg(usernameMsgEl, 'Username is required', false);
       cb(false);
       return;
     }
-    setMsg('Checking...', false);
+    setMsg(usernameMsgEl, 'Checking...', false);
     checkUsernameExists(username, function (err, exists) {
       if (err) {
-        setMsg('Validation failed, please try again later', false);
+        setMsg(usernameMsgEl, 'Validation failed, please try again later', false);
         cb(false);
         return;
       }
       if (exists) {
-        setMsg('Username already exists', false);
+        setMsg(usernameMsgEl, 'Username already exists', false);
         cb(false);
         return;
       }
-      setMsg('Username is available', true);
+      setMsg(usernameMsgEl, 'Username is available', true);
       cb(true);
     });
   }
+
+  function validatePasswordSync() {
+    var password = passwordEl.value || '';
+    var msg = validatePassword(password);
+    if (msg) {
+      setMsg(passwordMsgEl, msg, false);
+      return false;
+    }
+    setMsg(passwordMsgEl, 'OK', true);
+    return true;
+  }
+
+  function validateRepeatedPasswordSync() {
+    var password = passwordEl.value || '';
+    var repeatedPassword = repeatedPasswordEl.value || '';
+    var msg = validatePasswordsMatch(password, repeatedPassword);
+    if (msg) {
+      setMsg(repeatedPasswordMsgEl, msg, false);
+      return false;
+    }
+    if (!repeatedPassword) {
+      setMsg(repeatedPasswordMsgEl, 'Please repeat the password', false);
+      return false;
+    }
+    setMsg(repeatedPasswordMsgEl, 'OK', true);
+    return true;
+  }
+
+  passwordEl.addEventListener('blur', function () {
+    validatePasswordSync();
+    if (repeatedPasswordEl.value) {
+      validateRepeatedPasswordSync();
+    }
+  });
+
+  passwordEl.addEventListener('input', function () {
+    if (passwordMsgEl.textContent) {
+      validatePasswordSync();
+    }
+    if (repeatedPasswordEl.value) {
+      validateRepeatedPasswordSync();
+    }
+  });
+
+  repeatedPasswordEl.addEventListener('blur', function () {
+    validateRepeatedPasswordSync();
+  });
+
+  repeatedPasswordEl.addEventListener('input', function () {
+    if (repeatedPasswordMsgEl.textContent) {
+      validateRepeatedPasswordSync();
+    }
+  });
 
   usernameEl.addEventListener('blur', function () {
     validateUsernameAsync(function () {});
@@ -93,6 +176,13 @@
 
   formEl.addEventListener('submit', function (e) {
     e.preventDefault();
+
+    var passwordOk = validatePasswordSync();
+    var repeatedOk = validateRepeatedPasswordSync();
+    if (!passwordOk || !repeatedOk) {
+      return;
+    }
+
     validateUsernameAsync(function (ok) {
       if (ok) {
         formEl.submit();
