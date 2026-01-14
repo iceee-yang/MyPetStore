@@ -1,5 +1,6 @@
 package com.csu.petstore.web.servlet;
 
+import com.csu.petstore.domain.Category;
 import com.csu.petstore.domain.Item;
 import com.csu.petstore.domain.Product;
 import com.csu.petstore.service.CatalogService;
@@ -24,9 +25,16 @@ public class ProductFormServlet extends HttpServlet {
         catalogService = new CatalogService();
         Product product = catalogService.getProduct(productId);
         List<Item> itemList = catalogService.getItemListByProduct(productId);
+
+        Category category = null;
+        if (product != null && product.getCategoryId() != null) {
+            category = catalogService.getCategory(product.getCategoryId());
+        }
+
         HttpSession session = req.getSession();
         session.setAttribute("product" , product);
         session.setAttribute("itemList" , itemList);
+        session.setAttribute("category", category);
         req.getRequestDispatcher(PRODUCT_FORM).forward(req,resp);
     }
 }
